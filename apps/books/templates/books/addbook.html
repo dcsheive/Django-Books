@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Add Books</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
+</head>
+<body>
+    <div id="top" >
+                <h1>CodingDojo Books</h1>
+                <a href="/" >
+                    <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
+                </a>
+                <a href="/users" >
+                    <button class="btn btn-default" style="margin: 20px">Users</button>
+                </a>
+                <a href="/books" >
+                    <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
+                </a>
+                <div id="userdetail">
+                    <h3>Welcome, {{request.session.fname}}!</h3>
+                    <a href="/users/{{request.session.id}}">
+                        <button type="submit" class="btn btn-default yellowbutton" style="margin: 20px">My Profile</button>
+                    </a>
+                    <a href="/logout">
+                        <button class="btn btn-default" style="margin: 20px">Log Out</button>
+                    </a>
+                </div>
+            </div>
+            <div id="topback"></div>
+        <div id="reg">
+        <h2>Add a New Book and Review</h2>
+        <form action="/books/addbook" method="POST" id="myform">
+            {% csrf_token %}
+            <div class="form-group">
+            <label for="title">Book Title:</label>
+            <input type="text" class="form-control" name="title" value="{{request.session.title}}">
+            {% if messages %}
+                {% for message in messages %}
+                {% if 'title' in message.tags %}
+                    <p>{{ message}}</p>
+                {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="form-group">
+            <label for="author">Enter Author:</label>
+            <input type="text" class="form-control" name="author" value="{{request.session.author}}">
+            
+            </div>
+            <div class="form-group">
+                <label for="authorlist">Select Author from list:</label>
+                <select class="form-control" name="authorlist" value="{{request.session.authorlist}}">
+                    <option value="" selected="selected"> </option>
+                
+                    {% for i in authors%}
+                    <option value="{{i.name}}">{{i.name}}</option>
+                    {%endfor%}
+                </select>
+             
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if 'author' in message.tags %}
+                            <p>{{ message}}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-group">
+            <label for="review">Review:</label>
+            <textarea name="text" class="form-control" cols="30" rows="5">{{request.session.text}}</textarea>
+            {% if messages %}
+                {% for message in messages %}
+                    {% if 'review' in message.tags %}
+                        <p>{{ message}}</p>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="form-group">
+                    <label for="stars">Rating:</label>
+                    <select class="form-control" name="stars">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+            </div>
+        </form>
+        <div class="buttons">
+            <button type="submit" form="myform" class="btn btn-default yellowbutton" style="margin: 20px">Add Review</button>
+            <a href="/books"><button class="btn btn-default" style="margin: 20px">Go Back</button></a>
+        </div>
+    </div>  
+</body>
+</html>

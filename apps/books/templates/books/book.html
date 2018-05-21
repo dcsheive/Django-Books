@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{book.title}}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
+</head>
+<body>
+    <div id="top" >
+        <h1>CodingDojo Books</h1>
+        <a href="/" >
+            <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
+        </a>
+        <a href="/users" >
+            <button class="btn btn-default" style="margin: 20px">Users</button>
+        </a>
+        <a href="/books" >
+            <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
+        </a>
+        <div id="userdetail">
+            <h3>Welcome, {{request.session.fname}}!</h3>
+            <a href="/users/{{request.session.id}}">
+                <button type="submit" class="btn btn-default yellowbutton" style="margin: 20px">My Profile</button>
+            </a>
+            <a href="/logout">
+                <button class="btn btn-default" style="margin: 20px">Log Out</button>
+            </a>
+        </div>
+    </div>
+    <div id="topback"></div>
+    <div id="wrapper">
+        <div id="reg">
+            <h2>{{book.title}}</h2>
+            <h3 style="padding-left: unset">Author: {{book.author.name}}</h3>
+            <h2>Reviews:</h2>
+            {% for i in reviews %}
+            <div class="reviewbox">
+                <div class="stars">
+                <p>Rating: 
+                {% for j in range %}
+                    <p>
+                    {% if i.stars >= j %}
+                        ★   
+                    {% else %}
+                        ☆
+                    {% endif %}
+                    </p>
+                {% endfor %}
+                </p>
+                </div>
+                {% if i.poster.id == request.session.id %}
+                    <form action="/books/{{book.id}}/delete" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="review_id" value="{{i.id}}">
+                        <button type="submit" class="btn btn-default delete">Delete</button>
+                    </form>
+                {%endif%}
+                <p><a href="/books/user/{{i.poster.id}}">{{i.poster.first_name}}</a> says: {{i.text}}</p>
+                <p><span>Posted on {{i.created_at}}</span></p>
+            </div>
+            {%endfor%}
+        
+        </div>
+        <div id="log">
+            <h3>Add a Review: </h3>
+            <form action="/books/{{book.id}}/review" method="POST" id="myform">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="review">Review:</label>
+                    <textarea name="text" class="form-control" cols="30" rows="5">{{request.session.text}}</textarea>
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if 'review' in message.tags %}
+                                <p>{{ message}}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="stars">Rating:</label>
+                        <select class="form-control" name="stars">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <button type="submit" form="myform" class="btn btn-default" style="margin: 20px">Add Review</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
