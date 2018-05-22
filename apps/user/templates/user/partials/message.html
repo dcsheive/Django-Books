@@ -1,0 +1,29 @@
+<div class="message" id="{{newmessage.id}}">
+    <a href="/users/{{newmessage.poster.id}}"><h4>{{newmessage.poster.first_name}} {{newmessage.poster.last_name}}</h4></a><h5>on {{newmessage.created_at}}</h5>
+    {%if request.session.id == newmessage.poster.id%}
+    <form action="/users/{{user.id}}/deletemessage" method="post" class="deletemessage">
+        {% csrf_token %}
+        <input type="hidden" name='message_id' value="{{newmessage.id}}">
+        <button type="submit" class="btn btn-default delete">Delete</button>
+    </form>
+    {%endif%}
+    <p>{{newmessage.text}}</p>
+    <div class="commentbox">
+        <form action="/users/{{user.id}}/comment" method="post" class="commentform" mid="{{newmessage.id}}">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="hidden" name='message_id' value="{{newmessage.id}}">
+                <label for="comment">Post a comment</label>
+                <textarea class="form-control" rows="3" name="commentbox"></textarea>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if 'comment' in message.tags %}
+                            <p>{{ message}}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-default commentbutton">Post a comment</button>
+        </form>
+    </div>
+</div>

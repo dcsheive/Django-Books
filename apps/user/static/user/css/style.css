@@ -44,7 +44,7 @@ h3 {
 }
 #topback {
     width: 100px;
-    height: 22vh;
+    height: 15vh;
 }
 #userdetail {
     display: flex;
@@ -53,12 +53,11 @@ h3 {
 }
 #container{
     padding: 10%;
-    padding-top: 5%;
 }
 .commentbox {
     margin-top: 2%;
     margin-left: 5%;
-    margin-bottom: 15%;
+    margin-bottom: 7%;
 }
 .commentbutton{
     background: linear-gradient(blue, darkblue);
@@ -104,8 +103,8 @@ h4{
 }
 h5{
     float: left;
-    margin-left: 20px;
-    margin-top: 3px;
+    margin-left: 12px;
+    margin-top: 9px;
 }
 label {
     font-size: 18px;
@@ -113,6 +112,7 @@ label {
 .userbox {
     width: 45%;
     margin: auto;
+    margin-top: 2vh;
     border: 1px solid gray;
 }
 .userbox table tbody tr {
@@ -177,4 +177,14 @@ span {
 }
 .stars p {
     display: inline;
+}
+.profilebox {
+    width: 25%;
+    position: fixed;
+    top: 17vh;
+    left: 1%;
+    border-radius: 5px;
+    margin: auto;
+    border: 1px solid gray;
+    background-color: white;
 }

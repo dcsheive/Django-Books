@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from datetime import datetime
 from .models import Message, Comment, User
 from django.contrib import messages
 import bcrypt
+from django.core import serializers
+import json
 
 # Create your views here.
 def index(request):
@@ -123,14 +125,19 @@ def message(request, number):
             return redirect('/users/'+number)
         else:
             Message.objects.create(text=request.POST['messagebox'],poster=User.objects.get(id=request.session['id']), page = User.objects.get(id=number))
-        return redirect('/users/'+number)
+            context = {
+                'newmessage': Message.objects.last(),
+                'user': User.objects.get(id = number)
+            }
+        return render(request,'user/partials/message.html', context)
     else:
         return redirect('/users/'+number)
 
 def deletemessage(request, number):
-    Message.objects.get(id=int(request.POST['message_id'])).delete()
-    return redirect('/users/'+number)
-
+    a = Message.objects.get(id=int(request.POST['message_id']))
+    b = a.id
+    a.delete()
+    return HttpResponse(b)
 
 def comment(request, number):
     if request.method == 'POST':
@@ -141,10 +148,17 @@ def comment(request, number):
             return redirect('/users/'+number)
         else:
             Comment.objects.create(text=request.POST['commentbox'],poster=User.objects.get(id=request.session['id']), message = Message.objects.get(id=request.POST['message_id']), page = User.objects.get(id=number))
-        return redirect('/users/'+number)
+            context = {
+                'comment': Comment.objects.last(),
+                'user': User.objects.get(id = number)
+            }
+        return render(request,'user/partials/comment.html', context)
     else :
         return redirect('/users/'+number)
 
 def deletecomment(request,number):
-    Comment.objects.get(id=int(request.POST['comment_id'])).delete()
-    return redirect('/users/'+number)
+    a = Comment.objects.get(id=int(request.POST['comment_id']))
+    b = 'c'+str(a.id)
+    
+    # a.delete()
+    return HttpResponse(b)
