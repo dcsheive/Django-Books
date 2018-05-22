@@ -112,6 +112,8 @@ def updatepassword(request, number):
 def delete(request, number):
     b = User.objects.get(id=number)
     b.delete()
+    if User.objects.get(id=request.session['id']).user_level >0:
+        return redirect('/users')
     request.session.clear()
     return redirect('/')
 
@@ -159,6 +161,5 @@ def comment(request, number):
 def deletecomment(request,number):
     a = Comment.objects.get(id=int(request.POST['comment_id']))
     b = 'c'+str(a.id)
-    
-    # a.delete()
+    a.delete()
     return HttpResponse(b)
