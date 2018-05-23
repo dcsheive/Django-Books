@@ -14,4 +14,8 @@ urlpatterns = [
     url(r'(?P<number>\d+)/deletemessage', views.deletemessage),
     url(r'(?P<number>\d+)/deletecomment', views.deletecomment),
     url(r'(?P<number>\d+)/makeadmin', views.makeadmin),
+    url(r'(?P<number>\d+)/follow$', views.follow),
+    url(r'(?P<number>\d+)/followers', views.followers),
+    url(r'(?P<number>\d+)/followings', views.followings),
+    url(r'^dashboard', views.dashboard), 
 ]

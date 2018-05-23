@@ -3,7 +3,7 @@ from django.apps import apps
 
 
 # Create your models here.
-from ..register.models import User
+from ..register.models import User, UserManager
 
 class MessageManager(models.Manager):
       def message(self,data):
@@ -36,3 +36,11 @@ class Comment(models.Model):
       poster = models.ForeignKey(User, on_delete= models.CASCADE, related_name="comments")
       page = models.ForeignKey(User,on_delete=models.CASCADE, related_name="pages_comments")
       objects = CommentManager()
+
+
+class Follow(models.Model):
+      following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followings")
+      follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
+      created_at = models.DateTimeField(auto_now_add = True)
+      updated_at = models.DateTimeField(auto_now = True)
+      objects = UserManager()

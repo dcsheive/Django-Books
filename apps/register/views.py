@@ -47,7 +47,7 @@ def register(request):
             request.session.clear()
             request.session['id'] = User.objects.get(email=email).id
             request.session['fname'] = User.objects.get(id=request.session['id']).first_name
-            return redirect('/users/')
+            return redirect('/users/dashboard')
     else:
         return redirect('/reg')
 
@@ -62,7 +62,7 @@ def login(request):
         else:
             request.session['id'] = User.objects.get(email=email).id
             request.session['fname'] = User.objects.get(id=request.session['id']).first_name
-            return redirect('/users/')
+            return redirect('/users/dashboard')
     else:
         return redirect('/signin')
     
@@ -77,3 +77,4 @@ def home(request):
 def logout(request):
     request.session.clear()
     return redirect('/')
+

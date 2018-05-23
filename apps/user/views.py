@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from datetime import datetime
-from .models import Message, Comment, User
+from .models import Message, Comment, User, Follow
 from django.contrib import messages
 import bcrypt
 from django.core import serializers
@@ -50,7 +50,10 @@ def user(request, number):
     context = {
         'user': User.objects.get(id=number),
         'mymessages': reversed(Message.objects.filter(page= number)),
-        'comments': Comment.objects.filter(page= number)
+        'comments': Comment.objects.filter(page= number),
+        'followers' : Follow.objects.filter(following = number).count(),
+        'followings' : Follow.objects.filter(follower = number).count(),
+        'isfollowing' : Follow.objects.filter(follower=request.session['id']).filter(following=number),
     }
     return render(request,'user/user.html', context)
 
@@ -124,7 +127,7 @@ def message(request, number):
         if len(errors):
             for key, value in errors.items():
                 messages.error(request, value, extra_tags=key)
-            return redirect('/users/'+number)
+            return render(request,'user/partials/flash.html')
         else:
             Message.objects.create(text=request.POST['messagebox'],poster=User.objects.get(id=request.session['id']), page = User.objects.get(id=number))
             context = {
@@ -147,9 +150,12 @@ def comment(request, number):
         if len(errors):
             for key, value in errors.items():
                 messages.error(request, value, extra_tags=key)
-            return redirect('/users/'+number)
+            return render(request,'user/partials/flash.html')
         else:
             Comment.objects.create(text=request.POST['commentbox'],poster=User.objects.get(id=request.session['id']), message = Message.objects.get(id=request.POST['message_id']), page = User.objects.get(id=number))
+            this_message = Message.objects.get(id = request.POST['message_id'])
+            this_message.updated_at = datetime.now()
+            this_message.save()
             context = {
                 'comment': Comment.objects.last(),
                 'user': User.objects.get(id = number)
@@ -163,3 +169,32 @@ def deletecomment(request,number):
     b = 'c'+str(a.id)
     a.delete()
     return HttpResponse(b)
+
+def dashboard(request): 
+    allfollowings = [request.session['id']]
+    followings = Follow.objects.filter(follower=request.session['id'])
+    for i in followings:
+        allfollowings.append(i.following.id)
+    context = {
+        'mymessages': Message.objects.filter(page__in=allfollowings).order_by('-updated_at') [:15],
+        'comments': Comment.objects.filter(page__in=allfollowings),
+        'isfollowing': Follow.objects.filter(follower= request.session['id'])
+    }
+    return render(request,'user/dashboard.html', context)
+
+def follow(request,number):
+    this_user = User.objects.get(id= request.session['id'])
+    that_user = User.objects.get(id = number)
+    Follow.objects.create(following = that_user, follower = this_user)
+    return redirect('/users/'+number)
+
+def followers(request,number):
+    context = {
+        'followers' : Follow.objects.filter(following = number),
+    }
+    return render(request,'user/follows.html',context)
+def followings(request,number):
+    context = {
+        'followings' : Follow.objects.filter(follower = number),
+    }
+    return render(request,'user/follows.html',context)

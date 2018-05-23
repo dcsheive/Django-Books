@@ -1,5 +1,5 @@
 <div class="message" id="{{newmessage.id}}">
-    <a href="/users/{{newmessage.poster.id}}"><h4>{{newmessage.poster.first_name}} {{newmessage.poster.last_name}}</h4></a><h5>on {{newmessage.created_at}}</h5>
+    <a href="/users/{{newmessage.poster.id}}"><h4>{{newmessage.poster.first_name}} {{newmessage.poster.last_name}}</h4></a><h4 style="margin-top: 5px;">{% if newmessage.poster.id != user.id%} @{{user.first_name}} {{user.last_name}}{%endif%}<h5>on {{newmessage.created_at}}</h5>
     {%if request.session.id == newmessage.poster.id%}
     <form action="/users/{{user.id}}/deletemessage" method="post" class="deletemessage">
         {% csrf_token %}

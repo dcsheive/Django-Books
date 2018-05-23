@@ -15,8 +15,8 @@
         <a href="/" >
           <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
         </a>
-        <a href="/users" >
-          <button class="btn btn-default" style="margin: 20px">Users</button>
+        <a href="/users/dashboard" >
+          <button class="btn btn-default" style="margin: 20px">Dashboard</button>
         </a>
         <a href="/books" >
           <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
@@ -37,7 +37,9 @@
     <table class="table">
       <thead>
         <tr>
+          {%if current.user_level > 0 %}
           <th>id</th>
+          {%endif%}
           <th>First Name:</th>
           <th>Last Name:</th>
           <th>Email:</th>
@@ -46,7 +48,9 @@
       </thead>
       {%for i in users%}
       <tr>
+        {%if current.user_level > 0 %}
         <td>{{i.id}}</td>
+        {%endif%}
         <td>{{i.first_name}}</td>
         <td>{{i.last_name}}</td>
         <td>{{i.email}}</td>

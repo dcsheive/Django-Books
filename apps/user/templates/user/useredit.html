@@ -15,8 +15,8 @@
         <a href="/" >
             <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
         </a>
-        <a href="/users" >
-            <button class="btn btn-default" style="margin: 20px">Users</button>
+        <a href="/users/dashboard" >
+            <button class="btn btn-default" style="margin: 20px">Dashboard</button>
           </a>
           <a href="/books" >
             <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
@@ -49,7 +49,7 @@
                 <td><input type="text" name="email" value="{{user.email}}"></td>
             </tr>
             <tr>
-                <td>Status: </td>
+                <td>Bio: </td>
                 <td><textarea name="description" cols="30" rows="5">{{user.description}}</textarea></td>
             </tr>
             {% if messages %}
