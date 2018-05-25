@@ -19,4 +19,5 @@ urlpatterns = [
     url(r'(?P<number>\d+)/followers', views.followers),
     url(r'(?P<number>\d+)/followings', views.followings),
     url(r'^dashboard', views.dashboard), 
+    url(r'^update', views.updatedashboard), 
 ]

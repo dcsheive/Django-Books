@@ -27,7 +27,7 @@
                         $('#form1 textarea').after(response)
                     }
                     else {
-                        $('#form1').after(response);
+                        $('#update').after(response);
                         $('textarea').val('')
                         $('.flash').remove()
                     }
@@ -42,6 +42,18 @@
                 data: $(this).serialize(),
                 success: function (response){
                     $('.message').filter(function(){return this.id==response}).remove();
+                }
+            })
+        });
+        $('#container').on('submit', '#update', function(e){
+            $('#update').append("<input type='hidden' name='lastmessage' value='"+$(".message").first().attr('id')+"'>")
+            e.preventDefault()
+            $.ajax({ 
+                method: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response){
+                    $('#update').after(response)
                 }
             })
         });
@@ -96,18 +108,19 @@
         </div>
     </div>
     <div id="topback"></div>
-    <div id="container" style="padding-top: 0">
-        <form action="/users/{{request.session.id}}/message" id="form1" method="post">
+    <div id="postmessage" style="position: fixed; top:92vh; left: 89vw;" data-toggle="modal" data-target="#MyModal">
+        <button class="btn btn-default">Post a message</button>
+    </div>
+    <div id="container" style="padding-top: 0; margin: 1%;">
+        <form action="/users/update" id="update">
             {% csrf_token %}
-            <div class="form-group">
-                <label for="messagebox">Post a message</label>
-                <textarea class="form-control" rows="4" id="messagebox" name="messagebox"></textarea>
-            </div>
-            <button type="submit" class="btn btn-default">Post a message</button>
+            <button type="submit" class="btn btn-default" style="width: 100%; margin-top: 2%;">Get new posts</button>
         </form>
+        
+        
     {%if isfollowing%}
         {%for i in mymessages%}
-            <div class="message" id="{{i.id}}">
+            <div class="message" id="{{i.id}}" time='{{i.updated_at}}'>
                 <a href="/users/{{i.poster.id}}"><h4>{{i.poster.first_name}} {{i.poster.last_name}}</h4></a>{% if i.poster.id != i.page.id%}<a href="/users/{{i.page.id}}"><h4> @{{i.page.first_name}} {{i.page.last_name}}</h4></a>{%endif%}<h5>on {{i.created_at}}</h5>
                 {%if request.session.id == i.poster.id%}
                 <form action="/users/{{i.page.id}}/deletemessage" method="post" class="deletemessage">
@@ -153,5 +166,25 @@
         </a>
     {%endif%}
     </div>
+    <div class="modal" tabindex="-1" role="dialog" id="MyModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Post a message</h5>
+              <form action="/users/{{request.session.id}}/message" id="form1" method="post">
+            </div>
+            <div class="modal-body">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea class="form-control" rows="4" id="messagebox" name="messagebox"></textarea>
+                </div>
+            </div>
+            </form>
+            <div class="modal-footer">
+              <button type="submit" form="form1"class="btn btn-default">Post a message</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </body>
 </html>

@@ -5,6 +5,8 @@ from django.contrib import messages
 import bcrypt
 from django.core import serializers
 import json
+from django.utils import timezone
+import re
 
 # Create your views here.
 def index(request):
@@ -207,3 +209,15 @@ def getuser(request):
         'current': User.objects.get(id = request.session['id'])
     }
     return render(request,'user/partials/users.html', context)
+
+def updatedashboard(request):
+    lastmessage = Message.objects.get(id=request.POST['lastmessage']).updated_at
+    allfollowings = [request.session['id']]
+    followings = Follow.objects.filter(follower=request.session['id'])
+    for i in followings:
+        allfollowings.append(i.following.id)
+    context = {
+        'mymessages': Message.objects.filter(page__in=allfollowings).filter(updated_at__gt=lastmessage).order_by('-updated_at'),
+        'comments': Comment.objects.filter(page__in=allfollowings).filter(updated_at__gt=lastmessage),
+    }
+    return render(request, 'user/partials/newmessages.html', context)
