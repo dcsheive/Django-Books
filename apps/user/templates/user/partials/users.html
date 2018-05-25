@@ -1,0 +1,19 @@
+{%for i in users%}
+<tr>
+{%if current.user_level > 0 %}
+<td>{{i.id}}</td>
+{%endif%}
+<td>{{i.first_name}}</td>
+<td>{{i.last_name}}</td>
+<td>{{i.email}}</td>
+<td>
+    <div class="buttons2">
+    <a href="/users/{{i.id}}">Show</a>
+    {%if current.user_level > 0 %}
+    <a href="/users/{{i.id}}/edit">Edit</a>
+    <a href="/users/{{i.id}}/delete">Delete</a>
+    {%endif%}
+    </div>  
+</td>
+</tr>
+{%endfor%}

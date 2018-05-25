@@ -198,3 +198,12 @@ def followings(request,number):
         'followings' : Follow.objects.filter(follower = number),
     }
     return render(request,'user/follows.html',context)
+
+def getuser(request):
+    if 'id' not in request.session:
+        return redirect('/')
+    context = {
+        'users': (User.objects.filter(first_name__contains=request.POST['search']) | User.objects.filter(last_name__contains=request.POST['search']) | User.objects.filter(email__contains=request.POST['search'])).distinct(),
+        'current': User.objects.get(id = request.session['id'])
+    }
+    return render(request,'user/partials/users.html', context)

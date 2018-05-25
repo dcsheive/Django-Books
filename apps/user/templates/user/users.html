@@ -8,6 +8,27 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
   <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
+  <script src="{% static 'user/js/jquery.js' %}"></script>
+  <script src="{% static 'user/js/bootstrap.js' %}"></script>
+  <script>
+    $(document).ready(function(){
+      $('#form').submit(function(e){
+        e.preventDefault()
+      })
+      $('#search').keyup(function(){
+        $.ajax({
+          url: '/users/getuser', /* Where should this go? */
+          method: 'post', /* Which HTTP verb? */
+          data: $(this).parent().parent().serialize(), /* Any data to send along? */
+          success: function(serverResponse) { /* What code should we run when the server responds? */
+            $('tbody').html("")
+            $('tbody').html(serverResponse)
+
+          }
+        })
+      });
+    });
+  </script>
 </head>
 <body>
     <div id="top" >
@@ -33,7 +54,13 @@
     </div>
     <div id="topback"></div>
   <div id="usertable">
-    <h1>All Users</h1>
+    <form action="/users/getuser" id="form1" style="margin-top: 20px;" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="search">Find Users</label>
+        <input type="text" name="search" id="search">
+      </div>
+    </form>
     <table class="table">
       <thead>
         <tr>
@@ -46,6 +73,7 @@
           <th>Actions:</th>
         </tr>
       </thead>
+      <tbody>
       {%for i in users%}
       <tr>
         {%if current.user_level > 0 %}
@@ -65,6 +93,7 @@
         </td>
       </tr>
       {%endfor%}
+      </tbody>
     </table>
     {% if current.user_level > 0 %}
     <div class="buttons">
