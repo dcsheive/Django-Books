@@ -13,7 +13,12 @@
   <script>
       $(document).ready(function(){
         $('#container').on('click', 'p', function(){
-            $(this).siblings().slideDown();
+            if ($(this).siblings('.commentbox').is(':hidden')){
+                $(this).siblings('.commentbox').slideDown();
+            }
+            else {
+                $(this).siblings('.commentbox').slideUp();
+            }
         });
         $('#form1').submit(function(e){
             e.preventDefault()
