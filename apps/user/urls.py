@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'(?P<number>\d+)/followings', views.followings),
     url(r'^dashboard', views.dashboard), 
     url(r'^update', views.updatedashboard), 
+    url(r'^more', views.moredashboard), 
 ]

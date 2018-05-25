@@ -4,16 +4,15 @@ from .models import Message, Comment, User, Follow
 from django.contrib import messages
 import bcrypt
 from django.core import serializers
-import json
 from django.utils import timezone
-import re
+from django.db.models import Count
 
 # Create your views here.
 def index(request):
     if 'id' not in request.session:
         return redirect('/')
     context = {
-        'users': User.objects.all(),
+        'users': User.objects.all().annotate(num_followers=Count('followings')).order_by('-num_followers') [:15],
         'current': User.objects.get(id = request.session['id'])
     }
     return render(request,'user/users.html', context)
@@ -205,7 +204,7 @@ def getuser(request):
     if 'id' not in request.session:
         return redirect('/')
     context = {
-        'users': (User.objects.filter(first_name__contains=request.POST['search']) | User.objects.filter(last_name__contains=request.POST['search']) | User.objects.filter(email__contains=request.POST['search'])).distinct(),
+        'users': (User.objects.filter(first_name__contains=request.POST['search']) | User.objects.filter(last_name__contains=request.POST['search']) | User.objects.filter(email__contains=request.POST['search'])).annotate(num_followers=Count('followings')).order_by('-num_followers').distinct() [:15],
         'current': User.objects.get(id = request.session['id'])
     }
     return render(request,'user/partials/users.html', context)
@@ -220,4 +219,16 @@ def updatedashboard(request):
         'mymessages': Message.objects.filter(page__in=allfollowings).filter(updated_at__gt=lastmessage).order_by('-updated_at'),
         'comments': Comment.objects.filter(page__in=allfollowings).filter(updated_at__gt=lastmessage),
     }
+    return render(request, 'user/partials/newmessages.html', context)
+def moredashboard(request):
+    lastmessage = Message.objects.get(id=request.POST['lastmessage']).updated_at
+    allfollowings = [request.session['id']]
+    followings = Follow.objects.filter(follower=request.session['id'])
+    for i in followings:
+        allfollowings.append(i.following.id)
+    context = {
+        'mymessages': Message.objects.filter(page__in=allfollowings).filter(updated_at__lt=lastmessage).order_by('-updated_at') [:15],
+        'comments': Comment.objects.filter(page__in=allfollowings).filter(updated_at__lt=lastmessage),
+    }
+
     return render(request, 'user/partials/newmessages.html', context)

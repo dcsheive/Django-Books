@@ -12,7 +12,7 @@
   <script src="{% static 'user/js/bootstrap.js' %}"></script>
   <script>
       $(document).ready(function(){
-        $('.message').on('click', 'p', function(){
+        $('#container').on('click', 'p', function(){
             $(this).siblings().slideDown();
         });
         $('#form1').submit(function(e){
@@ -24,12 +24,13 @@
                 success: function (response, data){
                     if (response.substring(27,29)== "sh"){
                         $('.flash').remove()
-                        $('#form1 textarea').after(response)
+                        $('#messagebox').after(response)
                     }
                     else {
                         $('#update').after(response);
                         $('textarea').val('')
                         $('.flash').remove()
+                        $('.modal').modal('toggle');    
                     }
                 }
             })
@@ -54,6 +55,18 @@
                 data: $(this).serialize(),
                 success: function (response){
                     $('#update').after(response)
+                }
+            })
+        });
+        $('#container').on('submit', '#more', function(e){
+            $('#more').append("<input type='hidden' name='lastmessage' value='"+$(".message").last().attr('id')+"'>")
+            e.preventDefault()
+            $.ajax({ 
+                method: "POST",
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function (response){
+                    $('#more').before(response)
                 }
             })
         });
@@ -159,7 +172,11 @@
                 </form>
             </div>
         </div>
-        {%endfor%}  
+        {%endfor%}
+        <form action="/users/more" id="more">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-default" style="width: 100%; margin-top: 2%;">Get older posts</button>
+        </form>  
     {%else%}
         <a href="/users" >
             <h2 style="text-align: center; margin-top: 10%">Not following anyone? Click here to find friends!</h2>    
@@ -171,8 +188,9 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Post a message</h5>
-              <form action="/users/{{request.session.id}}/message" id="form1" method="post">
+              
             </div>
+            <form action="/users/{{request.session.id}}/message" id="form1" method="post">
             <div class="modal-body">
                 {% csrf_token %}
                 <div class="form-group">

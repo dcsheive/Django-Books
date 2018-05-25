@@ -56,9 +56,9 @@
   <div id="usertable">
     <form action="/users/getuser" id="form1" style="margin-top: 20px;" method="POST">
       {% csrf_token %}
-      <div class="form-group">
-        <label for="search">Find Users</label>
-        <input type="text" name="search" id="search">
+      <div class="form-group form-control">
+        <label for="search">Search Users: </label>
+        <input type="text" name="search" id="search" style="width: 80%">
       </div>
     </form>
     <table class="table">
@@ -70,6 +70,7 @@
           <th>First Name:</th>
           <th>Last Name:</th>
           <th>Email:</th>
+          <th>Followers:</th>
           <th>Actions:</th>
         </tr>
       </thead>
@@ -82,6 +83,7 @@
         <td>{{i.first_name}}</td>
         <td>{{i.last_name}}</td>
         <td>{{i.email}}</td>
+        <td>{{i.num_followers}}</td>
         <td>
           <div class="buttons2">
             <a href="/users/{{i.id}}">Show</a>
