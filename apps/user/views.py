@@ -232,3 +232,10 @@ def moredashboard(request):
     }
 
     return render(request, 'user/partials/newmessages.html', context)
+
+def unfollow(request,number):
+    this_user = User.objects.get(id= request.session['id'])
+    that_user = User.objects.get(id = number)
+    follow = Follow.objects.get(following = that_user, follower = this_user)
+    follow.delete()
+    return redirect('/users/'+number)

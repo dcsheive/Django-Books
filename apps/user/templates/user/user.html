@@ -142,8 +142,13 @@
             </a>
             {%if request.session.id != user.id %}
                 {%if not isfollowing%}
-                <a href="/users/{{user.id}}/follow">
+                <a href="/users/{{user.id}}/follow" id="follow">
                     <button class="btn btn-default commentbutton" style="margin: 10px">Follow</button>
+                </a>
+                {%endif%}
+                {%if isfollowing%}
+                <a href="/users/{{user.id}}/unfollow" id="unfollow">
+                    <button class="btn btn-default delete" style="margin: 10px">Unfollow</button>
                 </a>
                 {%endif%}
             {%endif%}

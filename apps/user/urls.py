@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^dashboard', views.dashboard), 
     url(r'^update', views.updatedashboard), 
     url(r'^more', views.moredashboard), 
+    url(r'(?P<number>\d+)/unfollow$', views.unfollow),
 ]
