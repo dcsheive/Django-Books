@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Coding Dojo Wall</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> {% load static %}
+    <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'user/img/favicon.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <script src="{% static 'user/js/jquery.js' %}"></script>
+    <script src="{% static 'user/js/bootstrap.js' %}"></script>
+    <script></script>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-fixed-top">
+        <a class="navbar-brand" href="/">
+            <h4>The Wall</h4>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                {% if request.session.fname %}
+                <li>
+                    <a class="nav-link" href="/users/dashboard">Dashboard</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/users">Users</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="/books">Books</a>
+                </li>
+                {% endif %}
+            </ul>
+            {% if request.session.fname %}
+            <h4 class="disappear">Welcome, {{request.session.fname}}!</h4>
+            <a class="nav-link" href="/users/{{request.session.id}}">My Profile</a>
+            <a class="nav-link" href="/logout">Logout</a>
+            {% else%}
+            <a class="nav-link" href="/signin">Sign In</a>
+            {% endif %}
+        </div>
+    </nav>
+    {% block content %} {% endblock %}
+</body>
+
+</html>

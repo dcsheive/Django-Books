@@ -1,28 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>{{user.first_name}}'s Profile</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
-  <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
-  <script src="{% static 'user/js/jquery.js' %}"></script>
-  <script src="{% static 'user/js/bootstrap.js' %}"></script>
-  <script>
-      $(document).ready(function(){
-        $('.message').on('click', 'p', function(){
+{% extends 'register/base.html' %} {% block content %}
+<script>
+    $(document).ready(function () {
+        $('.message').on('click', 'p', function () {
             $(this).siblings().slideDown();
         });
-        $('#form1').submit(function(e){
+        $('#form1').submit(function (e) {
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response, data){
-                    if (response.substring(27,29)== "sh"){
+                success: function (response, data) {
+                    if (response.substring(27, 29) == "sh") {
                         $('.flash').remove()
                         $('#form1 textarea').after(response)
                     }
@@ -34,181 +23,162 @@
                 }
             })
         });
-        $('#container').on('submit', '.message .deletemessage', function(e){
+        $('#container').on('submit', '.message .deletemessage', function (e) {
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
-                    $('.message').filter(function(){return this.id==response}).remove();
+                success: function (response) {
+                    $('.message').filter(function () { return this.id == response }).remove();
                 }
             })
         });
-        $('#container').on('submit','.message .commentform', function(e){
+        $('#container').on('submit', '.message .commentform', function (e) {
             var message_id = $(this).attr('mid');
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
-                    if (response.substring(27,29)== "sh"){
+                success: function (response) {
+                    if (response.substring(27, 29) == "sh") {
                         $('.flash').remove()
-                        var message = $('.message').filter(function(){return this.id==message_id})
+                        var message = $('.message').filter(function () { return this.id == message_id })
                         message.children().last().after(response)
                     }
                     else {
                         $('.flash').remove()
-                        var message = $('.message').filter(function(){return this.id==message_id})
+                        var message = $('.message').filter(function () { return this.id == message_id })
                         $(response).insertBefore(message.children().last())
                         $('textarea').val('')
                     }
                 }
             })
         });
-        $('#container').on('submit', '.deletecomment', function(e){
+        $('#container').on('submit', '.deletecomment', function (e) {
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
-                    $('.comment').filter(function(){return this.id==response}).remove();
+                success: function (response) {
+                    $('.comment').filter(function () { return this.id == response }).remove();
                 }
             })
         });
-      });
-  </script>
-</head>
-<body>
-    <div id="top" >
-        <h1>CodingDojo Wall</h1>
-        <a href="/" >
-            <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
-        </a>
-        <a href="/users/dashboard" >
-            <button class="btn btn-default" style="margin: 20px">Dashboard</button>
-          </a>
-          <a href="/books" >
-            <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
-        </a>
-        <div id="userdetail">
-            <h3>Welcome, {{request.session.fname}}!</h3>
-            <a href="/users/{{request.session.id}}">
-                <button type="submit" class="btn btn-default yellowbutton" style="margin: 20px">My Profile</button>
-            </a>
-            <a href="/logout">
-                <button class="btn btn-default" style="margin: 20px">Log Out</button>
-            </a>
-        </div>
-    </div>
-    <div id="topback"></div>
-    <div class="profilebox">
-        <table class="table">
-            <tr>
-                <td>Name: </td>
-                <td><h4>{{user.first_name}} {{user.last_name}}</h4></td>
-            </tr>
-            <tr>
-                <td>Email: </td>
-                <td>{{user.email}}</td>
-            </tr>
-            <tr>
-                <td>Joined: </td>
-                <td>{{user.created_at}}</td>
-            </tr>
-            <tr>
-                <td>Bio: </td>
-                <td>{{user.description}}</td>
-            </tr>
-            {% if followings > 0 %}
-            <tr>
-                <td>Following: </td>
-                <td><a href="/users/{{user.id}}/followings">{{followings}}</a></td> 
+    });
+</script>
+<div class="profilebox">
+    <table class="table">
+        <tr>
+            <td>Name: </td>
+            <td>
+                <h4>{{user.first_name}} {{user.last_name}}</h4>
             </td>
-            </tr>
-            {%endif%}
-            {% if followers > 0%}
-            <tr>
-                <td>Followers: </td>
-                <td><a href="/users/{{user.id}}/followers">{{followers}}</a></td> 
-            </tr>
-            {%endif%}
-        </table>
-        <div class="buttons">
-            <a href="/books/user/{{user.id}}">
-                <button class="btn btn-default yellowbutton" style="margin: 10px">My Books</button>
-            </a>
-            {%if request.session.id != user.id %}
-                {%if not isfollowing%}
-                <a href="/users/{{user.id}}/follow" id="follow">
-                    <button class="btn btn-default commentbutton" style="margin: 10px">Follow</button>
-                </a>
-                {%endif%}
-                {%if isfollowing%}
-                <a href="/users/{{user.id}}/unfollow" id="unfollow">
-                    <button class="btn btn-default delete" style="margin: 10px">Unfollow</button>
-                </a>
-                {%endif%}
-            {%endif%}
-            {% if request.session.id == user.id %}
-            <a href="/users/{{user.id}}/edit">
-                <button class="btn btn-default delete" style="margin: 10px">Edit Info</button>
-            </a>
-            {% endif %}
-        </div>  
+        </tr>
+        <tr>
+            <td>Email: </td>
+            <td>{{user.email}}</td>
+        </tr>
+        <tr>
+            <td>Joined: </td>
+            <td>{{user.created_at}}</td>
+        </tr>
+        <tr>
+            <td>Bio: </td>
+            <td>{{user.description}}</td>
+        </tr>
+        {% if followings > 0 %}
+        <tr>
+            <td>Following: </td>
+            <td>
+                <a href="/users/{{user.id}}/followings">{{followings}}</a>
+            </td>
+            </td>
+        </tr>
+        {%endif%} {% if followers > 0%}
+        <tr>
+            <td>Followers: </td>
+            <td>
+                <a href="/users/{{user.id}}/followers">{{followers}}</a>
+            </td>
+        </tr>
+        {%endif%}
+    </table>
+    <div class="buttons">
+        <a href="/books/user/{{user.id}}">
+            <button class="btn btn-default yellowbutton" style="margin: 10px">My Books</button>
+        </a>
+        {%if request.session.id != user.id %} {%if not isfollowing%}
+        <a href="/users/{{user.id}}/follow" id="follow">
+            <button class="btn btn-default commentbutton" style="margin: 10px">Follow</button>
+        </a>
+        {%endif%} {%if isfollowing%}
+        <a href="/users/{{user.id}}/unfollow" id="unfollow">
+            <button class="btn btn-default delete" style="margin: 10px">Unfollow</button>
+        </a>
+        {%endif%} {%endif%} {% if request.session.id == user.id %}
+        <a href="/users/{{user.id}}/edit">
+            <button class="btn btn-default delete" style="margin: 10px">Edit Info</button>
+        </a>
+        {% endif %}
     </div>
-    <div id="container" style="margin-left: 20%; padding-top: 0">
-        
-        <form action="/users/{{user.id}}/message" id="form1" method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="messagebox">Post a message</label>
-                <textarea class="form-control" rows="4" id="messagebox" name="messagebox"></textarea>
-            </div>
-            <button type="submit" class="btn btn-default">Post a message</button>
-        </form>
-        {%for i in mymessages%}
-            <div class="message" id="{{i.id}}">
-                <a href="/users/{{i.poster.id}}"><h4>{{i.poster.first_name}} {{i.poster.last_name}}</h4></a>{% if i.poster.id != user.id%}<h4 style="margin-top: 5px;"> @{{user.first_name}} {{user.last_name}}</h4>{%endif%}<h5>on {{i.created_at}}</h5>
-                {%if request.session.id == i.poster.id%}
-                <form action="/users/{{user.id}}/deletemessage" method="post" class="deletemessage">
-                    {% csrf_token %}
-                    <input type="hidden" name='message_id' value="{{i.id}}">
-                    <button type="submit" class="btn btn-default delete">Delete</button>
-                </form>
-                {%endif%}
-                <p>{{i.text}}</p>
-            
-            {% for j in comments%}
-                {% if j.message_id == i.id%}
-                <div class="comment" id="c{{j.id}}">
-                    <a href="/users/{{j.poster.id}}"><h4>{{j.poster.first_name}} {{j.poster.last_name}}</h4></a><h5>on {{j.created_at}}</h5>
-                    {%if request.session.id == j.poster.id%}
-                    <form action="/users/{{user.id}}/deletecomment" method="post" class="deletecomment">
-                        {% csrf_token %}
-                        <input type="hidden" name='comment_id' value="{{j.id}}">
-                        <button type="submit" class="btn btn-default delete">Delete</button>
-                    </form>
-                    {%endif%}
-                    <p>{{j.text}}</p>
-                </div>
-                {%endif%}
-            {%endfor%}
-            <div class="commentbox">
-                <form action="/users/{{user.id}}/comment" method="post" class="commentform" mid="{{i.id}}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <input type="hidden" name='message_id' value="{{i.id}}">
-                        <label for="comment">Post a comment</label>
-                        <textarea class="form-control" rows="3" name="commentbox"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-default commentbutton">Post a comment</button>
-                </form>
-            </div>
+</div>
+<div id="container" class="return">
+
+    <form action="/users/{{user.id}}/message" id="form1" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="messagebox">Post a message</label>
+            <textarea class="form-control" rows="4" id="messagebox" name="messagebox"></textarea>
         </div>
-        {%endfor%}  
+        <button type="submit" class="btn btn-default green">Post a message</button>
+    </form>
+    {%for i in mymessages%}
+    <div class="message" id="{{i.id}}">
+        <a href="/users/{{i.poster.id}}">
+            <h4>{{i.poster.first_name}} {{i.poster.last_name}}</h4>
+        </a>{% if i.poster.id != user.id%}
+        <h4 style="margin-top: 5px;"> @{{user.first_name}} {{user.last_name}}</h4>{%endif%}
+        <h5>on {{i.created_at}}</h5>
+        {%if request.session.id == i.poster.id%}
+        <form action="/users/{{user.id}}/deletemessage" method="post" class="deletemessage">
+            {% csrf_token %}
+            <input type="hidden" name='message_id' value="{{i.id}}">
+            <button type="submit" class="btn btn-default delete"><i class="fa fa-trash"></i></button>
+        </form>
+        {%endif%}
+        <p>{{i.text}}</p>
+
+        {% for j in comments%} {% if j.message_id == i.id%}
+        <div class="comment" id="c{{j.id}}">
+            <a href="/users/{{j.poster.id}}">
+                <h4>{{j.poster.first_name}} {{j.poster.last_name}}</h4>
+            </a>
+            <h5>on {{j.created_at}}</h5>
+            {%if request.session.id == j.poster.id%}
+            <form action="/users/{{user.id}}/deletecomment" method="post" class="deletecomment">
+                {% csrf_token %}
+                <input type="hidden" name='comment_id' value="{{j.id}}">
+                <button type="submit" class="btn btn-default delete"><i class="fa fa-trash"></i></button>
+            </form>
+            {%endif%}
+            <p>{{j.text}}</p>
+        </div>
+        {%endif%} {%endfor%}
+        <div class="commentbox">
+            <form action="/users/{{user.id}}/comment" method="post" class="commentform" mid="{{i.id}}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="hidden" name='message_id' value="{{i.id}}">
+                    <label for="comment">Post a comment</label>
+                    <textarea class="form-control" rows="3" name="commentbox"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default commentbutton">Post a comment</button>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+    {%endfor%}
+</div>
+{%endblock%}

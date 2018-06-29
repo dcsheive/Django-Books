@@ -1,39 +1,49 @@
-*{
-    margin:0 ;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
-.applesauce {
+@media only screen and (min-width: 767px) {
+  body {
+    padding-top: 85px;
+  }
+  .applesauce {
     width: 200px;
     background-color: red;
-}
-#wrapper {
+  }
+  #wrapper {
     display: flex;
     justify-content: space-between;
-}
-#reg, #log {
+  }
+  #reg,
+  #log {
     width: 500px;
     padding: 20px;
-}
-button {
+  }
+  button {
+    
+    color: white;
+    
+  }
+  .green {
     background: linear-gradient(rgb(2, 207, 2), green);
     box-shadow: 2px 2px 2px black;
-    color: white;
     background-color: green;
-}
-form p, .flash {
-    color:red;
+  }
+  form p,
+  .flash {
+    color: red;
     list-style-type: none;
-}
-h1 {
+  }
+  h1 {
     padding: 20px;
-}
-.thanks {
+  }
+  .thanks {
     padding: 20px;
-}
-h3 {
+  }
+  h3 {
     padding: 20px;
-}
-#top {
+  }
+  #top {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -41,40 +51,40 @@ h3 {
     position: fixed;
     width: 100vw;
     background-color: whitesmoke;
-}
-#topback {
+  }
+  #topback {
     width: 100px;
     height: 15vh;
-}
-#userdetail {
+  }
+  #userdetail {
     display: flex;
     justify-content: space-between;
     width: 40%;
-}
-#container{
-    padding: 10%;
-}
-.commentbox {
+  }
+  #container {
+    padding: 0 10% 10% 10%;
+  }
+  .commentbox {
     margin-top: 2%;
     margin-left: 5%;
     margin-bottom: 7%;
-    display:none;
-}
-.commentbutton{
+    display: none;
+  }
+  .commentbutton {
     background: linear-gradient(blue, darkblue);
     float: right;
     background-color: darkblue;
-}
-.delete {
+  }
+  .delete {
     background: linear-gradient(red, darkred);
     background-color: darkred;
     float: right;
-}
-.yellowbutton {
+  }
+  .yellowbutton {
     background: linear-gradient(orange, rgb(207, 114, 0));
     background-color: rgb(226, 125, 1);
-}
-.message {
+  }
+  .message {
     clear: both;
     border: 1px solid gray;
     padding: 5px;
@@ -82,8 +92,8 @@ h3 {
     border-radius: 5px;
     box-shadow: 5px 5px 10px rgb(77, 76, 76);
     overflow: wrap;
-}
-.comment {
+  }
+  .comment {
     clear: both;
     padding: 5px;
     margin-top: 2%;
@@ -91,95 +101,94 @@ h3 {
     border-radius: 5px;
     border: 1px solid darkgray;
     box-shadow: 2px 2px 5px gray;
-
-}
-p {
-    margin-left:10px; 
+  }
+  p {
+    margin-left: 10px;
     font-size: 20px;
     clear: both;
     overflow-wrap: break-word;
-}
-h4{
+  }
+  h4 {
     float: left;
-}
-h5{
+  }
+  h5 {
     float: left;
     margin-left: 10px;
     margin-top: 9px;
-}
-label {
+  }
+  label {
     font-size: 18px;
-}
-.userbox {
-    width: 45%;
+  }
+  .userbox {
+    width: 65%;
     margin: auto;
     margin-top: 2vh;
     border: 1px solid gray;
-}
-.userbox table tbody tr {
+  }
+  .userbox table tbody tr {
     display: flex;
     justify-content: space-between;
     border-top: 1px solid lightgray;
-}
-.userbox table tbody tr td {
+  }
+  .userbox table tbody tr td {
     border-top: 0;
     font-size: 20px;
-}
-.buttons {
+  }
+  .buttons {
     display: flex;
     justify-content: space-between;
-}
-#usertable {
-    width: 50%;
+  }
+  #usertable {
+    width: 60%;
     margin: auto;
-}
-#usertable table {
+  }
+  #usertable table {
     border: 1px solid gray;
-}
-#usertable h1 {
+  }
+  #usertable h1 {
     text-align: center;
-}
-.sub {
+  }
+  .sub {
     width: 100vw;
     display: flex;
     justify-content: space-around;
-}
-.subbox {
+  }
+  .subbox {
     width: 25%;
     height: 25%;
     background: linear-gradient(whitesmoke, rgb(201, 201, 201));
     padding: 20px;
     box-shadow: 5px 5px 10px rgb(77, 76, 76);
-}
-a h4 {
+  }
+  a h4 {
     font-size: 25px;
     padding: 5px;
-}
-.reviewbox {
+  }
+  .reviewbox {
     padding: 10px;
     border-top: 2px solid black;
-}
-.booklist{
+  }
+  .booklist {
     border: 1px solid black;
     height: 70%;
     padding: 5px;
     overflow-y: auto;
-    overflow-x: hidden; 
-}
-.height {
+    overflow-x: hidden;
+  }
+  .height {
     height: 70vh;
-}
-span {
+  }
+  span {
     font-style: italic;
-}
-.stars {
+  }
+  .stars {
     clear: both;
     float: left;
-}
-.stars p {
+  }
+  .stars p {
     display: inline;
-}
-.profilebox {
+  }
+  .profilebox {
     width: 25%;
     position: fixed;
     top: 17vh;
@@ -188,8 +197,8 @@ span {
     margin: auto;
     border: 1px solid gray;
     background-color: white;
-}
-.follows {
+  }
+  .follows {
     height: 200px;
     width: 300px;
     border: 1px solid darkgray;
@@ -197,4 +206,267 @@ span {
     margin: 20px;
     display: inline-block;
     padding: 20px;
+  }
+  .navbar {
+    border-bottom: 1px solid black;
+  }
+  .navbar-fixed-top {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 1030;
+  }
+  #postmessage {
+    position: fixed; 
+    bottom: 5vh;
+    right: 5vw;
+    }
+#postmessage button{
+    padding: 20px;
+    font-size: 20px;
+}
+.return {
+    margin-left: 20%;
+}
+}
+@media only screen and (max-width: 767px) {
+  body {
+    padding-top: 85px;
+  }
+  .applesauce {
+    width: 200px;
+    background-color: red;
+  }
+  #wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+  #reg,
+  #log {
+    width: 500px;
+    padding: 20px;
+  }
+  button {
+    
+    color: white;
+    
+  }
+  .green {
+    background: linear-gradient(rgb(2, 207, 2), green);
+    box-shadow: 2px 2px 2px black;
+    background-color: green;
+  }
+  form p,
+  .flash {
+    color: red;
+    list-style-type: none;
+  }
+  h1 {
+    padding: 20px;
+  }
+  .thanks {
+    padding: 20px;
+  }
+  h3 {
+    padding: 20px;
+  }
+  #top {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    border-bottom: 2px solid black;
+    position: fixed;
+    width: 100vw;
+    background-color: whitesmoke;
+  }
+  #topback {
+    width: 100px;
+    height: 15vh;
+  }
+  #userdetail {
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+  }
+  #container {
+    padding: 0 5% 5% 5%;
+  }
+  .commentbox {
+    margin-top: 2%;
+    margin-left: 5%;
+    margin-bottom: 14%;
+    display: none;
+  }
+  .commentbutton {
+    background: linear-gradient(blue, darkblue);
+    float: right;
+    background-color: darkblue;
+  }
+  .delete {
+    background: linear-gradient(red, darkred);
+    background-color: darkred;
+    float: right;
+  }
+  .yellowbutton {
+    background: linear-gradient(orange, rgb(207, 114, 0));
+    background-color: rgb(226, 125, 1);
+  }
+  .message {
+    clear: both;
+    border: 1px solid gray;
+    padding: 5px;
+    margin-top: 5%;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgb(77, 76, 76);
+    overflow: wrap;
+  }
+  .message h5{
+    font-size: 18px;
+  }
+  .message h4 {
+      font-size: 20px;
+      margin: 0;
+  }
+  .message .delete {
+    z-index: 1030;  
+  }
+  .comment {
+    clear: both;
+    padding: 5px;
+    margin-top: 2%;
+    margin-left: 5%;
+    border-radius: 5px;
+    border: 1px solid darkgray;
+    box-shadow: 2px 2px 5px gray;
+  }
+  p {
+    margin-left: 10px;
+    font-size: 20px;
+    clear: both;
+    overflow-wrap: break-word;
+  }
+  h4 {
+    float: left;
+  }
+  h5 {
+    float: left;
+    margin-left: 10px;
+    margin-top: 9px;
+  }
+  label {
+    font-size: 18px;
+  }
+  .userbox {
+    width: 80%;
+    margin: auto;
+    margin-top: 2vh;
+    border: 1px solid gray;
+  }
+  .userbox table tbody tr {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid lightgray;
+  }
+  .userbox table tbody tr td {
+    border-top: 0;
+    font-size: 20px;
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  #usertable {
+    width: 100%;
+    margin: auto;
+  }
+  #usertable table {
+    border: 1px solid gray;
+  }
+  #usertable h1 {
+    text-align: center;
+  }
+  .sub {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+  }
+  .subbox {
+    width: 80%;
+    height: 50%;
+    margin: auto;
+    margin-bottom: 20px;
+    background: linear-gradient(whitesmoke, rgb(201, 201, 201));
+    padding: 20px;
+
+    box-shadow: 5px 5px 10px rgb(77, 76, 76);
+  }
+  a h4 {
+    font-size: 25px;
+    padding: 5px;
+  }
+  .reviewbox {
+    padding: 10px;
+    border-top: 2px solid black;
+  }
+  .booklist {
+    border: 1px solid black;
+    height: 70%;
+    padding: 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .height {
+    height: 70vh;
+  }
+  span {
+    font-style: italic;
+  }
+  .stars {
+    clear: both;
+    float: left;
+  }
+  .stars p {
+    display: inline;
+  }
+  .profilebox {
+    width: 80%;
+    top: 17vh;
+    left: 1%;
+    border-radius: 5px;
+    margin: auto;
+    border: 1px solid gray;
+    background-color: white;
+  }
+  .follows {
+    height: 200px;
+    width: 300px;
+    border: 1px solid darkgray;
+    box-shadow: 2px 2px 5px gray;
+    margin: 20px;
+    display: inline-block;
+    padding: 20px;
+  }
+  .navbar {
+    border-bottom: 1px solid black;
+  }
+  .navbar-fixed-top {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 1030;
+  }
+  #postmessage {
+      position: fixed; 
+      bottom: 5vh;
+      right: 5vw;
+  }
+  #postmessage button{
+    padding: 15px;
+    font-size: 20px;
+    }
+  .disappear {
+      display: none;
+  }
 }

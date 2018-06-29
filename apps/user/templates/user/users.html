@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Users</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
-  <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
-  <script src="{% static 'user/js/jquery.js' %}"></script>
-  <script src="{% static 'user/js/bootstrap.js' %}"></script>
+{% extends 'register/base.html' %}
+
+{% block content %}
   <script>
     $(document).ready(function(){
       $('#form').submit(function(e){
         e.preventDefault()
       })
-      $('#search').keyup(function(){
+      $('#search').keyup(function(e){
+        e.preventDefault()
         $.ajax({
           url: '/users/getuser', /* Where should this go? */
           method: 'post', /* Which HTTP verb? */
@@ -29,36 +21,12 @@
       });
     });
   </script>
-</head>
-<body>
-    <div id="top" >
-        <h1>CodingDojo Wall</h1>
-        <a href="/" >
-          <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
-        </a>
-        <a href="/users/dashboard" >
-          <button class="btn btn-default" style="margin: 20px">Dashboard</button>
-        </a>
-        <a href="/books" >
-          <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
-      </a>
-        <div id="userdetail">
-            <h3>Welcome, {{request.session.fname}}!</h3>
-            <a href="/users/{{request.session.id}}">
-                <button type="submit" class="btn btn-default yellowbutton" style="margin: 20px">My Profile</button>
-            </a>
-            <a href="/logout">
-                <button class="btn btn-default" style="margin: 20px">Log Out</button>
-            </a>
-        </div>
-    </div>
-    <div id="topback"></div>
   <div id="usertable">
     <form action="/users/getuser" id="form1" style="margin-top: 20px;" method="POST">
       {% csrf_token %}
       <div class="form-group form-control">
         <label for="search">Search Users: </label>
-        <input type="text" name="search" id="search" style="width: 80%">
+        <input type="text" name="search" id="search" class="form-control">
       </div>
     </form>
     <table class="table">
@@ -100,9 +68,8 @@
     </table>
     {% if current.user_level > 0 %}
     <div class="buttons">
-      <a href="/users/create"><button class="btn btn-default" style="margin: 20px">Create User</button></a>
+      <a href="/users/create"><button class="btn btn-default green">Create User</button></a>
     </div>
     {%endif%}
   </div>
-</body>
-</html>
+{% endblock%}

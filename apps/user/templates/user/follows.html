@@ -1,38 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Follows</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
-  <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
-  <script src="{% static 'user/js/bootstrap.js' %}"></script>
-</head>
-<body>
-    <div id="top" >
-        <h1>CodingDojo Wall</h1>
-        <a href="/" >
-            <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
-        </a>
-        <a href="/users/dashboard" >
-            <button class="btn btn-default" style="margin: 20px">Dashboard</button>
-          </a>
-          <a href="/books" >
-            <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
-        </a>
-        <div id="userdetail">
-            <h3>Welcome, {{request.session.fname}}!</h3>
-            <a href="/users/{{request.session.id}}">
-                <button type="submit" class="btn btn-default yellowbutton" style="margin: 20px">My Profile</button>
-            </a>
-            <a href="/logout">
-                <button class="btn btn-default" style="margin: 20px">Log Out</button>
-            </a>
-        </div>
-    </div>
-    <div id="topback"></div>
+{% extends 'register/base.html' %}
+
+{% block content %}
     {%if followers%}
     {%for i in followers%}
     <div class="follows">
@@ -49,5 +17,4 @@
     </div>
     {%endfor%}
     {%endif%}
-</body>
-</html>
+{% endblock %}

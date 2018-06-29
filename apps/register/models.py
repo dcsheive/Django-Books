@@ -7,7 +7,7 @@ class UserManager(models.Manager):
         errors = {}
         if len(data['email']) < 1:
             errors["email"] = "Please enter an email!"
-        elif not re.match('[A-Za-z-0-9-_]+(.[A-Za-z-0-9-_]+)*@[A-Za-z-0-9-_]+(.[A-Za-z-0-9-_]+)*(.[A-Za-z]{2,})', data['email']):
+        elif not re.match(r'[A-Za-z-0-9-_]+(.[A-Za-z-0-9-_]+)*@[A-Za-z-0-9-_]+(.[A-Za-z-0-9-_]+)*\.([A-Za-z]{2,})', data['email']):
             errors["email"] = "Please enter a valid email!"
         elif User.objects.filter(email=data['email']):
             errors["email"] = "Email taken!"

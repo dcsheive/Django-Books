@@ -1,33 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>The Wall</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'user/css/bootstrap.css' %}">
-  <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
-  <script src="{% static 'user/js/jquery.js' %}"></script>
-  <script src="{% static 'user/js/bootstrap.js' %}"></script>
-  <script>
-      $(document).ready(function(){
-        $('#container').on('click', 'p', function(){
-            if ($(this).siblings('.commentbox').is(':hidden')){
+{% extends 'register/base.html' %} {% block content %}
+<script>
+    $(document).ready(function () {
+        $('#container').on('click', 'p', function () {
+            if ($(this).siblings('.commentbox').is(':hidden')) {
                 $(this).siblings('.commentbox').slideDown();
             }
             else {
                 $(this).siblings('.commentbox').slideUp();
             }
         });
-        $('#form1').submit(function(e){
+        $('#form1').submit(function (e) {
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response, data){
-                    if (response.substring(27,29)== "sh"){
+                success: function (response, data) {
+                    if (response.substring(27, 29) == "sh") {
                         $('.flash').remove()
                         $('#messagebox').after(response)
                     }
@@ -35,179 +24,160 @@
                         $('#update').after(response);
                         $('textarea').val('')
                         $('.flash').remove()
-                        $('.modal').modal('toggle');    
+                        $('.modal').modal('toggle');
                     }
                 }
             })
         });
-        $('#container').on('submit', '.message .deletemessage', function(e){
+        $('#container').on('submit', '.message .deletemessage', function (e) {
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
-                    $('.message').filter(function(){return this.id==response}).remove();
+                success: function (response) {
+                    $('.message').filter(function () { return this.id == response }).remove();
                 }
             })
         });
-        $('#container').on('submit', '#update', function(e){
-            $('#update').append("<input type='hidden' name='lastmessage' value='"+$(".message").first().attr('id')+"'>")
+        $('#container').on('submit', '#update', function (e) {
+            $('#update').append("<input type='hidden' name='lastmessage' value='" + $(".message").first().attr('id') + "'>")
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
+                success: function (response) {
                     $('#update').after(response)
                 }
             })
         });
-        $('#container').on('submit', '#more', function(e){
-            $('#more').append("<input type='hidden' name='lastmessage' value='"+$(".message").last().attr('id')+"'>")
+        $('#container').on('submit', '#more', function (e) {
+            $('#more').append("<input type='hidden' name='lastmessage' value='" + $(".message").last().attr('id') + "'>")
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
+                success: function (response) {
                     $('#more').before(response)
                 }
             })
         });
-        $('#container').on('submit','.message .commentform', function(e){
+        $('#container').on('submit', '.message .commentform', function (e) {
             var message_id = $(this).attr('mid');
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
-                    var message = $('.message').filter(function(){return this.id==message_id})
+                success: function (response) {
+                    var message = $('.message').filter(function () { return this.id == message_id })
                     $(response).insertBefore(message.children().last())
                     $('textarea').val('')
                 }
             })
         });
-        $('#container').on('submit', '.deletecomment', function(e){
+        $('#container').on('submit', '.deletecomment', function (e) {
             e.preventDefault()
-            $.ajax({ 
+            $.ajax({
                 method: "POST",
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
-                success: function (response){
-                    $('.comment').filter(function(){return this.id==response}).remove();
+                success: function (response) {
+                    $('.comment').filter(function () { return this.id == response }).remove();
                 }
             })
         });
-      });
-  </script>
-</head>
-<body>
-    <div id="top" >
-        <h1>CodingDojo Wall</h1>
-        <a href="/" >
-            <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
-        </a>
-        <a href="/users" >
-            <button class="btn btn-default" style="margin: 20px">Users</button>
-          </a>
-          <a href="/books" >
-            <button class="btn btn-default yellowbutton" style="margin: 20px">Books</button>
-        </a>
-        <div id="userdetail">
-            <h3>Welcome, {{request.session.fname}}!</h3>
-            <a href="/users/{{request.session.id}}">
-                <button type="submit" class="btn btn-default yellowbutton" style="margin: 20px">My Profile</button>
-            </a>
-            <a href="/logout">
-                <button class="btn btn-default" style="margin: 20px">Log Out</button>
-            </a>
-        </div>
-    </div>
-    <div id="topback"></div>
-    <div id="postmessage" style="position: fixed; top:92vh; left: 89vw;" data-toggle="modal" data-target="#MyModal">
-        <button class="btn btn-default">Post a message</button>
-    </div>
-    <div id="container" style="padding-top: 0; margin: 1%;">
-        <form action="/users/update" id="update">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-default" style="width: 100%; margin-top: 2%;">Get new posts</button>
-        </form>
-        
-        
-    {%if isfollowing%}
-        {%for i in mymessages%}
-            <div class="message" id="{{i.id}}" time='{{i.updated_at}}'>
-                <a href="/users/{{i.poster.id}}"><h4>{{i.poster.first_name}} {{i.poster.last_name}}</h4></a>{% if i.poster.id != i.page.id%}<a href="/users/{{i.page.id}}"><h4> @{{i.page.first_name}} {{i.page.last_name}}</h4></a>{%endif%}<h5>on {{i.created_at}}</h5>
-                {%if request.session.id == i.poster.id%}
-                <form action="/users/{{i.page.id}}/deletemessage" method="post" class="deletemessage">
-                    {% csrf_token %}
-                    <input type="hidden" name='message_id' value="{{i.id}}">
-                    <button type="submit" class="btn btn-default delete">Delete</button>
-                </form>
-                {%endif%}
-                <p>{{i.text}}</p>
-            
-            {% for j in comments%}
-                {% if j.message_id == i.id%}
-                <div class="comment" id="c{{j.id}}">
-                    <a href="/users/{{j.poster.id}}"><h4>{{j.poster.first_name}} {{j.poster.last_name}}</h4></a><h5>on {{j.created_at}}</h5>
-                    {%if request.session.id == j.poster.id%}
-                    <form action="/users/{{j.page.id}}/deletecomment" method="post" class="deletecomment">
-                        {% csrf_token %}
-                        <input type="hidden" name='comment_id' value="{{j.id}}">
-                        <button type="submit" class="btn btn-default delete">Delete</button>
-                    </form>
-                    {%endif%}
-                    <p>{{j.text}}</p>
-                </div>
-                {%endif%}
-            {%endfor%}
-            <div class="commentbox">
-                <form action="/users/{{i.page.id}}/comment" method="post" class="commentform" mid="{{i.id}}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <input type="hidden" name='message_id' value="{{i.id}}">
-                        <label for="comment">Post a comment</label>
-                        <textarea class="form-control" rows="3" name="commentbox"></textarea>
+    });
+</script>
+<div id="postmessage" data-toggle="modal" data-target="#MyModal">
+    <button class="btn btn-default green">Post a message</button>
+</div>
+<div id="container">
+    <form action="/users/update" id="update">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-default green" style="width: 100%; margin-top: 2%;">Get new posts</button>
+    </form>
 
-                    </div>
-                    <button type="submit" class="btn btn-default commentbutton">Post a comment</button>
-                </form>
-            </div>
-        </div>
-        {%endfor%}
-        <form action="/users/more" id="more">
+
+    {%if isfollowing%} {%for i in mymessages%}
+    <div class="message" id="{{i.id}}" time='{{i.updated_at}}'>
+        <a href="/users/{{i.poster.id}}">
+            <h4>{{i.poster.first_name}} {{i.poster.last_name}}</h4>
+        </a>{% if i.poster.id != i.page.id%}
+        <a href="/users/{{i.page.id}}">
+            <h4> @{{i.page.first_name}} {{i.page.last_name}}</h4>
+        </a>{%endif%}
+        <h5>on {{i.created_at}}</h5>
+        {%if request.session.id == i.poster.id%}
+        <form action="/users/{{i.page.id}}/deletemessage" method="post" class="deletemessage">
             {% csrf_token %}
-            <button type="submit" class="btn btn-default" style="width: 100%; margin-top: 2%;">Get older posts</button>
-        </form>  
-    {%else%}
-        <a href="/users" >
-            <h2 style="text-align: center; margin-top: 10%">Not following anyone? Click here to find friends!</h2>    
-        </a>
-    {%endif%}
-    </div>
-    <div class="modal" tabindex="-1" role="dialog" id="MyModal">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Post a message</h5>
-              
-            </div>
-            <form action="/users/{{request.session.id}}/message" id="form1" method="post">
-            <div class="modal-body">
+            <input type="hidden" name='message_id' value="{{i.id}}">
+            <button type="submit" class="btn btn-default delete"><i class="fa fa-trash"></i></button>
+        </form>
+        {%endif%}
+        <p>{{i.text}}</p>
+
+        {% for j in comments%} {% if j.message_id == i.id%}
+        <div class="comment" id="c{{j.id}}">
+            <a href="/users/{{j.poster.id}}">
+                <h4>{{j.poster.first_name}} {{j.poster.last_name}}</h4>
+            </a>
+            <h5>on {{j.created_at}}</h5>
+            {%if request.session.id == j.poster.id%}
+            <form action="/users/{{j.page.id}}/deletecomment" method="post" class="deletecomment">
+                {% csrf_token %}
+                <input type="hidden" name='comment_id' value="{{j.id}}">
+                <button type="submit" class="btn btn-default delete"><i class="fa fa-trash"></i></button>
+            </form>
+            {%endif%}
+            <p>{{j.text}}</p>
+        </div>
+        {%endif%} {%endfor%}
+        <div class="commentbox">
+            <form action="/users/{{i.page.id}}/comment" method="post" class="commentform" mid="{{i.id}}">
                 {% csrf_token %}
                 <div class="form-group">
-                    <textarea class="form-control" rows="4" id="messagebox" name="messagebox"></textarea>
+                    <input type="hidden" name='message_id' value="{{i.id}}">
+                    <label for="comment">Post a comment</label>
+                    <textarea class="form-control" rows="3" name="commentbox"></textarea>
+
                 </div>
+                <button type="submit" class="btn btn-default commentbutton">Post a comment</button>
+            </form>
+        </div>
+    </div>
+    {%endfor%}
+    <form action="/users/more" id="more">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-default green" style="width: 100%; margin-top: 2%;">Get older posts</button>
+    </form>
+    {%else%}
+    <a href="/users">
+        <h2 style="text-align: center; margin-top: 10%">Not following anyone? Click here to find friends!</h2>
+    </a>
+    {%endif%}
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="MyModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Post a message</h5>
+
             </div>
+            <form action="/users/{{request.session.id}}/message" id="form1" method="post">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea class="form-control" rows="4" id="messagebox" name="messagebox"></textarea>
+                    </div>
+                </div>
             </form>
             <div class="modal-footer">
-              <button type="submit" form="form1"class="btn btn-default">Post a message</button>
+                <button type="submit" form="form1" class="btn btn-default green">Post a message</button>
             </div>
-          </div>
         </div>
-      </div>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

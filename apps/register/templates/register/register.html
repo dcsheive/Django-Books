@@ -1,100 +1,128 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Register</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% load static %}
-  <link rel="stylesheet" href="{% static 'register/css/bootstrap.css' %}">
-  <link rel="stylesheet" href="{% static 'user/css/style.css' %}">
-  <script src="{% static 'user/js/jquery.js' %}"></script>
-  <script src="{% static 'user/js/bootstrap.js' %}"></script>
-  <script>
-      $(document).ready(function(){
-        
-      });
-  </script>
-</head>
-<body>
-  <div id="top" >
-      <h1>CodingDojo Wall</h1>
-      <a href="/" >
-        <button class="btn btn-default commentbutton" style="margin: 20px">Home</button>
-      </a>
-      <div id="userdetail">
-          {% if request.session.fname %}
-          <h3>Welcome, {{request.session.fname}}!</h3>
-          <a href="/users/{{request.session.id}}">
-              <button type="submit" class="btn btn-default yellowbutton" style="margin: 20px">My Profile</button>
-          </a>
-          <a href="/logout">
-              <button class="btn btn-default" style="margin: 20px">Log Out</button>
-          </a>
-          {% else%}
-          <a href="/signin" >
-            <button class="btn btn-default" style="margin: 20px">Sign In</button>
-          </a>
-          {% endif %}
+{% extends 'register/base.html' %}
+
+{% block content %}
+<script>
+  $(document).ready(function() {
+    $('#password').keyup(function(e){
+      $(this).next('.flash').remove();
+      if ($('#password').val().length <8) {
+        $('.passwordvalid').remove();
+
+        $('#password').after('<p class="passwordvalid">Password must be 8 characters!</p>')
+      }
+      else {
+        $('.passwordvalid').remove();
+      }
+    })
+    $('#passconfirm').keyup(function(e){
+      $(this).next('.flash').remove();
+
+      if ($('#passconfirm').val() != $('#password').val()) {
+        $('.passconfirmvalid').remove();
+
+        $('#passconfirm').after("<p class='passconfirmvalid'>Passwords don't match!</p>")
+      }
+      else {
+        $('.passconfirmvalid').remove();
+      }
+    })
+    $('#first_name').keyup(function(e){
+      $(this).next('.flash').remove();
+
+      if ($('#first_name').val().length <2 ) {
+        $('.firstvalid').remove();
+
+        $('#first_name').after("<p class='firstvalid'>First name must be 2 characters!</p>")
+      }
+      else {
+        $('.firstvalid').remove();
+      }
+    })
+    $('#last_name').keyup(function(e){
+      $(this).next('.flash').remove();
+
+      if ($('#last_name').val().length <2 ) {
+        $('.lastvalid').remove();
+
+        $('#last_name').after("<p class='lastvalid'>Last name must be 2 characters!</p>")
+      }
+      else {
+        $('.lastvalid').remove();
+      }
+    })
+    $('#email').keyup(function(e){
+      $(this).next('.flash').remove();
+
+      var email = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,4}$');
+
+      if (!email.test($('#email').val())) {
+        $('.emailvalid').remove();
+
+        $('#email').after("<p class='emailvalid'>Please enter a valid email!</p>")
+      }
+      else {
+        $('.emailvalid').remove();
+      }
+    })
+  })
+</script>
+<div id="wrapper">
+  <div id="reg">
+    <h2>Register</h2>
+    <form action="/register" method="POST" id="register">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="text" class="form-control" name="email" id="email" value="{{request.session.email}}">
+        {% if messages %}
+        {% for message in messages %}
+        {% if 'email' in message.tags %}
+        <p class="flash">{{ message}}</p>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
       </div>
+      <div class="form-group">
+        <label for="first_name">First Name:</label>
+        <input type="text" class="form-control" name="first_name" id="first_name" value="{{request.session.name1}}">
+        {% if messages %}
+        {% for message in messages %}
+        {% if 'first_name' in message.tags %}
+        <p class="flash">{{ message}}</p>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name:</label>
+        <input type="text" class="form-control" name="last_name" id="last_name" value="{{request.session.name2}}">
+        {% if messages %}
+        {% for message in messages %}
+        {% if 'last_name' in message.tags %}
+        <p class="flash">{{ message}}</p>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" name="password">
+        {% if messages %}
+        {% for message in messages %}
+        {% if 'password' in message.tags %}
+        <p class="flash">{{ message}}</p>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+      </div>
+      <div class="form-group">
+        <label for="passconfirm">Confirm Password:</label>
+        <input type="password" class="form-control" id="passconfirm" name="passconfirm">
+      </div>
+      <button type="submit" class="btn btn-default green">Register</button>
+    </form>
   </div>
-  <div id="topback"></div>
-  <div id="wrapper">
-    <div id="reg">
-      <h2>Register</h2>
-      <form action="/register" method="POST">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="text" class="form-control" name="email" value="{{request.session.email}}">
-          {% if messages %}
-            {% for message in messages %}
-              {% if 'email' in message.tags %}
-                <p>{{ message}}</p>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </div>
-        <div class="form-group">
-          <label for="first_name">First Name:</label>
-          <input type="text" class="form-control" name="first_name" value="{{request.session.name1}}">
-          {% if messages %}
-            {% for message in messages %}
-              {% if 'first_name' in message.tags %}
-                <p>{{ message}}</p>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </div>
-        <div class="form-group">
-          <label for="last_name">Last Name:</label>
-          <input type="text" class="form-control" name="last_name" value="{{request.session.name2}}">
-          {% if messages %}
-            {% for message in messages %}
-              {% if 'last_name' in message.tags %}
-                <p>{{ message}}</p>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </div>
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" class="form-control" name="password">
-          {% if messages %}
-            {% for message in messages %}
-              {% if 'password' in message.tags %}
-                <p>{{ message}}</p>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </div>
-        <div class="form-group">
-          <label for="passconfirm">Confirm Password:</label>
-          <input type="password" class="form-control" name="passconfirm">
-        </div>
-        <button type="submit" class="btn btn-default">Register</button>
-      </form>
-    </div>
-  </div>
+</div>
 </body>
 </html>
+{% endblock %}
