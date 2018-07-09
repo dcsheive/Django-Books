@@ -128,7 +128,7 @@ def message(request, number):
         if len(errors):
             for key, value in errors.items():
                 messages.error(request, value, extra_tags=key)
-            return render(request,'user/partials/flash.html')
+            return HttpResponse("")
         else:
             Message.objects.create(text=request.POST['messagebox'],poster=User.objects.get(id=request.session['id']), page = User.objects.get(id=number))
             context = {
@@ -151,7 +151,7 @@ def comment(request, number):
         if len(errors):
             for key, value in errors.items():
                 messages.error(request, value, extra_tags=key)
-            return render(request,'user/partials/flash.html')
+            return HttpResponse("")
         else:
             Comment.objects.create(text=request.POST['commentbox'],poster=User.objects.get(id=request.session['id']), message = Message.objects.get(id=request.POST['message_id']), page = User.objects.get(id=number))
             this_message = Message.objects.get(id = request.POST['message_id'])
