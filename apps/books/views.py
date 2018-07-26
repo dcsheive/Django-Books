@@ -93,7 +93,6 @@ def addreview(request,number):
 def delete(request, number):
     if request.method =="POST":
         this_review = Review.objects.get(id = request.POST['review_id'])
-        print(this_review.message.id)
         Message.objects.get(id = this_review.message.id).delete()
         this_review.delete()
         return redirect('/books/'+number)
