@@ -4,7 +4,6 @@ from django.apps import apps
 
 # Create your models here.
 from ..register.models import User, UserManager
-
 class MessageManager(models.Manager):
       def message(self,data):
             errors= {}

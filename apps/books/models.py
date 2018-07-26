@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 from ..register.models import User
+from ..user.models import Message
 
 class ReviewManager(models.Manager):
     def addbook(self,data):
@@ -48,4 +49,5 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
     poster = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    message = models.OneToOneField(Message, on_delete=models.CASCADE, related_name="review")
     objects = ReviewManager()

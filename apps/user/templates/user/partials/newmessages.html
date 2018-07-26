@@ -18,7 +18,21 @@
         </button>
     </form>
     {%endif%}
-    <p>{{i.text}}</p>
+    {% if i.review %}
+        <p>{{i.poster.first_name}} reviewed <a href="/books/{{i.review.book.id}}">{{i.review.book.title}}</a></p>
+        <p>"{{i.review.text}}"</p>
+        <p>Rating: 
+            {% for j in range %}
+                {% if i.review.stars >= j %}
+                    ★   
+                {% else %}
+                    ☆
+                {% endif %}
+            {% endfor %}
+            </p>
+        {% else %}
+        <p>{{i.text}}</p>
+        {% endif %}
     {% for j in comments%} {% if j.message_id == i.id%}
     <div class="comment" id="c{{j.id}}">
         <a href="/users/{{j.poster.id}}">

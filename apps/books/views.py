@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import User,Book,Author,Review
+from .models import User,Book,Author,Review, Message 
 from django.contrib import messages
 
 # Create your views here.
@@ -31,7 +31,9 @@ def addbook(request):
                 this_author = Author.objects.get(name=request.POST['authorlist'])
             Book.objects.create(title=request.POST['title'], author=this_author)
             this_book = Book.objects.get(title=request.POST['title'])
-            Review.objects.create(stars=request.POST['stars'], text=request.POST['text'],book= this_book, poster= User.objects.get(id=request.session['id']))
+            this_user = User.objects.get(id=request.session['id'])
+            Message.objects.create(page=this_user,poster= this_user, text=this_user.first_name+" "+this_user.last_name+" reviewed a book!")
+            Review.objects.create(stars=request.POST['stars'], text=request.POST['text'],book= this_book, poster= this_user, message= Message.objects.last())
             keepid = request.session['id'] 
             keepname = request.session['fname']
             request.session.clear()
@@ -81,14 +83,19 @@ def addreview(request,number):
                 messages.error(request, value, extra_tags=key)
             return redirect('/books/'+number)
         else:
-            Review.objects.create(stars=request.POST['stars'], text=request.POST['text'],book= Book.objects.get(id=number), poster= User.objects.get(id=request.session['id']))
+            this_user = User.objects.get(id=request.session['id'])
+            Message.objects.create(page=this_user,poster= this_user, text=this_user.first_name+" "+this_user.last_name+" reviewed a book!")
+            Review.objects.create(stars=request.POST['stars'], text=request.POST['text'],book= Book.objects.get(id=number), poster= this_user ,message= Message.objects.last() )
             return redirect('/books/'+number)
     else:
         return redirect('/books/')
 
 def delete(request, number):
     if request.method =="POST":
-        Review.objects.get(id = request.POST['review_id']).delete()
+        this_review = Review.objects.get(id = request.POST['review_id'])
+        print(this_review.message.id)
+        Message.objects.get(id = this_review.message.id).delete()
+        this_review.delete()
         return redirect('/books/'+number)
     else:
         return redirect('/books/')

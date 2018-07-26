@@ -51,6 +51,7 @@ def create(request):
 def user(request, number):
     context = {
         'user': User.objects.get(id=number),
+        'range': [1,2,3,4,5],
         'mymessages': reversed(Message.objects.filter(page= number)),
         'comments': Comment.objects.filter(page= number),
         'followers' : Follow.objects.filter(following = number).count(),
@@ -180,7 +181,8 @@ def dashboard(request):
     context = {
         'mymessages': Message.objects.filter(page__in=allfollowings).order_by('-updated_at') [:15],
         'comments': Comment.objects.filter(page__in=allfollowings),
-        'isfollowing': Follow.objects.filter(follower= request.session['id'])
+        'isfollowing': Follow.objects.filter(follower= request.session['id']),
+        'range': [1,2,3,4,5]
     }
     return render(request,'user/dashboard.html', context)
 
@@ -219,6 +221,7 @@ def updatedashboard(request):
     context = {
         'mymessages': Message.objects.filter(page__in=allfollowings).filter(updated_at__gt=lastmessage).order_by('-updated_at'),
         'comments': Comment.objects.filter(page__in=allfollowings).filter(updated_at__gt=lastmessage),
+        'range' : [1,2,3,4,5]
     }
     return render(request, 'user/partials/newmessages.html', context)
 def moredashboard(request):
@@ -230,6 +233,7 @@ def moredashboard(request):
     context = {
         'mymessages': Message.objects.filter(page__in=allfollowings).filter(updated_at__lt=lastmessage).order_by('-updated_at') [:15],
         'comments': Comment.objects.filter(page__in=allfollowings).filter(updated_at__lt=lastmessage),
+        'range' : [1,2,3,4,5]
     }
 
     return render(request, 'user/partials/newmessages.html', context)
