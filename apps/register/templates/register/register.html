@@ -3,12 +3,33 @@
 {% block content %}
 <script>
   $(document).ready(function() {
+    $('#register').submit(function(e){
+      if ($(".xd")[0] || $('#first_name').val().length <1 || $('#last_name').val().length <1 || $('#email').val().length <1 || $('#password').val().length <1 ||$('#passconfirm').val().length <1 ){
+        $('.od').remove();
+        e.preventDefault()
+        if ($('#first_name').val().length <1){
+          $('#first_name').after("<p class='firstvalid od'>Enter a first name!</p>")
+        }
+        if ($('#last_name').val().length <1){
+          $('#last_name').after("<p class='lastvalid od'>Enter a last name!</p>")
+        }
+        if ($('#password').val().length <1){
+          $('#password').after('<p class="passwordvalid od">Enter a password!</p>')
+        }
+        if ($('#passconfirm').val().length <1){
+          $('#passconfirm').after("<p class='passconfirmvalid od'>Confirm your password!</p>")
+        }
+        if ($('#email').val().length <1){
+          $('#email').after("<p class='emailvalid od'>Enter an email!</p>")
+        }
+      }
+    })
     $('#password').keyup(function(e){
       $(this).next('.flash').remove();
       if ($('#password').val().length <8) {
         $('.passwordvalid').remove();
 
-        $('#password').after('<p class="passwordvalid">Password must be 8 characters!</p>')
+        $('#password').after('<p class="passwordvalid xd">Password must be 8 characters!</p>')
       }
       else {
         $('.passwordvalid').remove();
@@ -20,7 +41,7 @@
       if ($('#passconfirm').val() != $('#password').val()) {
         $('.passconfirmvalid').remove();
 
-        $('#passconfirm').after("<p class='passconfirmvalid'>Passwords don't match!</p>")
+        $('#passconfirm').after("<p class='passconfirmvalid xd'>Passwords don't match!</p>")
       }
       else {
         $('.passconfirmvalid').remove();
@@ -32,7 +53,7 @@
       if ($('#first_name').val().length <2 ) {
         $('.firstvalid').remove();
 
-        $('#first_name').after("<p class='firstvalid'>First name must be 2 characters!</p>")
+        $('#first_name').after("<p class='firstvalid xd'>First name must be 2 characters!</p>")
       }
       else {
         $('.firstvalid').remove();
@@ -44,7 +65,7 @@
       if ($('#last_name').val().length <2 ) {
         $('.lastvalid').remove();
 
-        $('#last_name').after("<p class='lastvalid'>Last name must be 2 characters!</p>")
+        $('#last_name').after("<p class='lastvalid xd'>Last name must be 2 characters!</p>")
       }
       else {
         $('.lastvalid').remove();
@@ -58,10 +79,23 @@
       if (!email.test($('#email').val())) {
         $('.emailvalid').remove();
 
-        $('#email').after("<p class='emailvalid'>Please enter a valid email!</p>")
+        $('#email').after("<p class='emailvalid xd'>Please enter a valid email!</p>")
       }
       else {
-        $('.emailvalid').remove();
+        $.ajax({
+            method: "POST",
+            url: "/check",
+            data: $(this).parent().parent().serialize(),
+            success: function (response) {
+              if(response =="true"){
+                $('.emailvalid').remove();
+                $('#email').after("<p class='emailvalid xd'>Email taken!</p>")
+              } else {
+                $('.emailvalid').remove();
+              }
+             
+            }
+        })
       }
     })
   })

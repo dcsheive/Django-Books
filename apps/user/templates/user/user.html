@@ -77,6 +77,9 @@
 <div class="profilebox">
     <table class="table">
         <tr>
+            <center><img class="mainpic" src={{user.image.url}} data-toggle="modal" data-target="#picture"></center>
+        </tr>
+        <tr>
             <td>Name: </td>
             <td>
                 <h4>{{user.first_name}} {{user.last_name}}</h4>
@@ -143,6 +146,7 @@
     {%for i in mymessages%}
     <div class="message" id="{{i.id}}">
         <a href="/users/{{i.poster.id}}">
+            <img src={{i.poster.image.url}} class="smol">
             <h4>{{i.poster.first_name}} {{i.poster.last_name}}</h4>
         </a>{% if i.poster.id != user.id%}
         <h4 style="margin-top: 5px;"> @{{user.first_name}} {{user.last_name}}</h4>{%endif%}
@@ -159,6 +163,7 @@
         {% for j in comments%} {% if j.message_id == i.id%}
         <div class="comment" id="c{{j.id}}">
             <a href="/users/{{j.poster.id}}">
+                <img src={{j.poster.image.url}} class="smol">
                 <h4>{{j.poster.first_name}} {{j.poster.last_name}}</h4>
             </a>
             <h5>on {{j.created_at}}</h5>
@@ -186,4 +191,28 @@
     </div>
     {%endfor%}
 </div>
+{%if request.session.id == user.id %}
+<div class="modal" tabindex="-1" role="dialog" id="picture">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Profile Picture</h5>
+
+            </div>
+            <form action="/users/change" id="pic" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for='newimg'>Upload image</label>
+                        <input type="file" name='newimg' id="newimg"/>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="submit" form="pic" class="btn btn-default green">Change</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {%endblock%}

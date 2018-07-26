@@ -7,4 +7,5 @@ urlpatterns = [
     url(r'^logout', views.logout),
     url(r'^signin', views.signin),
     url(r'^reg', views.reg), 
+    url(r'^check', views.email),
 ] 

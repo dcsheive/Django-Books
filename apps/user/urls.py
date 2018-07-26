@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^update', views.updatedashboard), 
     url(r'^more', views.moredashboard), 
     url(r'(?P<number>\d+)/unfollow$', views.unfollow),
+    url(r'^change', views.changepic)
 ]

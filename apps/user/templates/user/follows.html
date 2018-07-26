@@ -4,7 +4,8 @@
     {%if followers%}
     {%for i in followers%}
     <div class="follows">
-        <a href="/users/{{i.follower.id}}"><h4>{{i.follower.first_name}} {{i.follower.last_name}}</h4></a>
+
+        <a href="/users/{{i.follower.id}}"><img src={{i.follower.image.url}} class="smol"><h4>{{i.follower.first_name}} {{i.follower.last_name}}</h4></a>
         <p>{{i.follower.description}}</p>
     </div>
     {%endfor%}
@@ -12,7 +13,7 @@
     {%if followings%}
     {%for i in followings%}
     <div class="follows">
-        <a href="/users/{{i.following.id}}"><h4>{{i.following.first_name}} {{i.following.last_name}}</h4></a>
+        <a href="/users/{{i.following.id}}"><img src={{i.following.image.url}} class="smol"><h4>{{i.following.first_name}} {{i.following.last_name}}</h4></a>
         <p>{{i.following.description}}</p>
     </div>
     {%endfor%}

@@ -73,4 +73,5 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     description = models.TextField()
     user_level = models.IntegerField()
+    image = models.ImageField(upload_to='media', default='none.jpg')
     objects = UserManager()

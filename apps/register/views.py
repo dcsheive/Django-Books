@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .models import User
 import bcrypt
 import re
@@ -77,4 +77,11 @@ def home(request):
 def logout(request):
     request.session.clear()
     return redirect('/')
+
+def email(request):
+    try:
+        User.objects.get(email=request.POST['email']),
+        return HttpResponse("true")
+    except:
+        return HttpResponse("something else")
 

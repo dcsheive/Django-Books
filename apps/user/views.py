@@ -6,6 +6,7 @@ import bcrypt
 from django.core import serializers
 from django.utils import timezone
 from django.db.models import Count
+import os
 
 # Create your views here.
 def index(request):
@@ -239,3 +240,24 @@ def unfollow(request,number):
     follow = Follow.objects.get(following = that_user, follower = this_user)
     follow.delete()
     return redirect('/users/'+number)
+
+def changepic(request):
+    this_user = User.objects.get(id= request.session['id'])
+    if len(request.FILES) != 0:
+        if this_user.image.url != "none.jpg":
+            _delete_file("media/"+str(this_user.image))
+        handle_uploaded_file(request.FILES['newimg'], str(request.FILES['newimg']))
+        this_user.image = str(request.FILES['newimg'])
+        this_user.save()
+    return redirect('/users/'+str(request.session['id']))
+
+
+
+def handle_uploaded_file(file, filename):
+    with open('media/' + filename, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+def _delete_file(path):
+    if os.path.isfile(path):
+        os.remove(path)

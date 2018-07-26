@@ -112,9 +112,11 @@
     {%if isfollowing%} {%for i in mymessages%}
     <div class="message" id="{{i.id}}" time='{{i.updated_at}}'>
         <a href="/users/{{i.poster.id}}">
+            <img src={{i.poster.image.url}} class="smol">
             <h4>{{i.poster.first_name}} {{i.poster.last_name}}</h4>
         </a>{% if i.poster.id != i.page.id%}
         <a href="/users/{{i.page.id}}">
+            <img src={{i.page.image.url}} class="smol">
             <h4> @{{i.page.first_name}} {{i.page.last_name}}</h4>
         </a>{%endif%}
         <h5>on {{i.created_at}}</h5>
@@ -130,6 +132,7 @@
         {% for j in comments%} {% if j.message_id == i.id%}
         <div class="comment" id="c{{j.id}}">
             <a href="/users/{{j.poster.id}}">
+                <img src={{j.poster.image.url}} class="smol">
                 <h4>{{j.poster.first_name}} {{j.poster.last_name}}</h4>
             </a>
             <h5>on {{j.created_at}}</h5>
