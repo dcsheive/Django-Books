@@ -244,10 +244,10 @@ def unfollow(request,number):
 def changepic(request):
     this_user = User.objects.get(id= request.session['id'])
     if len(request.FILES) != 0:
-        if this_user.image.url != "none.jpg":
+        if str(this_user.image) != "none.jpg":
             _delete_file("media/"+str(this_user.image))
-        handle_uploaded_file(request.FILES['newimg'], str(request.FILES['newimg']))
-        this_user.image = str(request.FILES['newimg'])
+        handle_uploaded_file(request.FILES['newimg'], this_user.email+".jpg")
+        this_user.image = this_user.email+".jpg"
         this_user.save()
     return redirect('/users/'+str(request.session['id']))
 
