@@ -1,0 +1,61 @@
+sudo apt-get update && sudo apt-get -y upgrade
+sudo apt-get install nginx
+sudo apt-get install git
+sudo apt-get install python3
+sudo apt-get install -y python3-pip
+sudo apt-get install python3-venv
+git clone https://github.com/dcsheive/Django-Books.git
+
+
+
+sudo vim Django-Books/Login/settings.py
+Debug = False
+ALLOWED_HOSTS = ["{{public-ip}}"]
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install gunicorn
+python Django-Books/manage.py collectstatic
+sudo vim /etc/systemd/system/gunicorn.service
+
+
+[Unit]
+Description=gunicorn daemon
+After=network.target
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/Django-Books
+ExecStart=/home/ubuntu/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/Django-Books/Login.sock Login.wsgi:application
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reload
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+
+sudo rm -rf /etc/nginx/sites-available/default
+sudo vim /etc/nginx/sites-available/Login
+
+server {
+  listen 80;
+  server_name {{public-ip}};
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location /static/ {
+      root /home/ubuntu/Django-Books;
+  }
+  location /media/ {
+      root /home/ubuntu/Django-Books;
+  }
+  location / {
+      include proxy_params;
+      proxy_pass http://unix:/home/ubuntu/Django-Books/Login.sock;
+  }
+}
+sudo ln -s /etc/nginx/sites-available/Login /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl daemon-reload
+sudo systemctl enable nginx
+sudo service nginx start
+python3 Django-Books/manage.py runserver 172.31.35.155:8000
