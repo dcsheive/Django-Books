@@ -11,7 +11,7 @@ sed -i "s/\("DEBUG" *= *\).*/\1$False/" $path_to_settings
 sed -i "s/\("ALLOWED_HOSTS" *= *\).*/\1$PUBLIC_/" $path_to_settings
 echo "STATIC_ROOT = os.path.join(BASE_DIR, 'static/')" >> $path_to_settings
 
-sudo source venv/bin/activate
+sudo source ./venv/bin/activate
 sudo python3 Django-Books/manage.py migrate
 sudo python3 Django-Books/manage.py collectstatic --noinput
 sudo systemctl daemon-reload

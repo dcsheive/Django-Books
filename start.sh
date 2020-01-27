@@ -21,11 +21,11 @@ sed -i "s/\("ALLOWED_HOSTS" *= *\).*/\1$PUBLIC_/" $path_to_settings
 echo "STATIC_ROOT = os.path.join(BASE_DIR, 'static/')" >> $path_to_settings
 
 sudo python3 -m venv venv
-sudo source venv/bin/activate
-sudo pip3 install -r requirements.txt
-sudo pip3 install gunicorn
-sudo python3 Django-Books/manage.py migrate
-sudo python3 Django-Books/manage.py collectstatic
+source ./venv/bin/activate
+pip3 install -r Django-Books/requirements.txt
+pip3 install gunicorn
+python3 Django-Books/manage.py migrate
+python3 Django-Books/manage.py collectstatic
 
 echo "[Unit]
 Description=gunicorn daemon
