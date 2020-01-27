@@ -1,5 +1,6 @@
 *.pyc
 venv/
+*.sqlite3
 *.pem
 media/
 !media/none.jpg
