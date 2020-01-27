@@ -1,6 +1,7 @@
 *.pyc
 venv/
-*.sqlite3
 *.pem
 media/
+!media/none.jpg
 __pycache__/
+.vscode

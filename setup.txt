@@ -36,6 +36,7 @@ sudo systemctl start gunicorn
 sudo systemctl enable gunicorn
 
 sudo rm -rf /etc/nginx/sites-available/default
+sudo rm -rf /etc/nginx/sites-enabled/default
 sudo vim /etc/nginx/sites-available/Login
 
 server {
