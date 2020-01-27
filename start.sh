@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 PUBLIC=${1?Error: No Public IP given}
-PRIVATE=${2?Error: No Private IP given}
 echo ${PUBLIC}
-echo ${PRIVATE}
 
 cd ..
 
@@ -38,12 +36,16 @@ ExecStart=/home/ubuntu/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/Dj
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/gunicorn.service
 
+sudo systemctl daemon-reload
+sudo systemctl start gunicorn
+sudo systemctl enable gunicorn
+
 sudo rm -rf /etc/nginx/sites-available/default
 sudo rm -rf /etc/nginx/sites-enabled/default
 
 echo "server {
   listen 80;
-  server_name ${PRIVATE};
+  server_name ${PUBLIC};
   location = /favicon.ico { access_log off; log_not_found off; }
   location /static/ {
       root /home/ubuntu/Django-Books;
