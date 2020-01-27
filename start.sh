@@ -4,12 +4,15 @@ PRIVATE=${2?Error: No Private IP given}
 echo ${PUBLIC}
 echo ${PRIVATE}
 
-eval "apt-get install nginx"
-eval "apt-get install python3"
-eval "apt-get install -y python3-pip"
-eval "apt-get install python3-venv"
+cd ..
 
-path_to_settings = "Django-Books/Login/settings.py"
+sudo apt-get update && sudo apt-get -y upgrade
+sudo apt-get --assume-yes install nginx
+sudo apt-get --assume-yes install python3
+sudo apt-get --assume-yes install -y python3-pip
+sudo apt-get --assume-yes install python3-venv
+
+path_to_settings="Django-Books/Login/settings.py"
 PUBLIC_="['${PUBLIC}']" 
 False=False
 
@@ -17,12 +20,12 @@ sed -i "s/\("DEBUG" *= *\).*/\1$False/" $path_to_settings
 sed -i "s/\("ALLOWED_HOSTS" *= *\).*/\1$PUBLIC_/" $path_to_settings
 echo "STATIC_ROOT = os.path.join(BASE_DIR, 'static/')" >> $path_to_settings
 
-eval "python3 -m venv venv"
-eval "source venv/bin/activate"
-eval "pip install -r requirements.txt"
-eval "pip install gunicorn"
-eval "python Django-Books/manage.py migrate"
-eval "python Django-Books/manage.py collectstatic"
+sudo python3 -m venv venv
+sudo source venv/bin/activate
+sudo pip3 install -r requirements.txt
+sudo pip3 install gunicorn
+sudo python3 Django-Books/manage.py migrate
+sudo python3 Django-Books/manage.py collectstatic
 
 echo "[Unit]
 Description=gunicorn daemon
@@ -35,8 +38,8 @@ ExecStart=/home/ubuntu/venv/bin/gunicorn --workers 3 --bind unix:/home/ubuntu/Dj
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/gunicorn.service
 
-eval "rm -rf /etc/nginx/sites-available/default"
-eval "rm -rf /etc/nginx/sites-enabled/default"
+sudo rm -rf /etc/nginx/sites-available/default
+sudo rm -rf /etc/nginx/sites-enabled/default
 
 echo "server {
   listen 80;
@@ -54,8 +57,8 @@ echo "server {
   }
 }" > /etc/nginx/sites-available/Login
 
-eval "ln -s /etc/nginx/sites-available/Login /etc/nginx/sites-enabled/"
-eval "nginx -t"
-eval "systemctl daemon-reload"
-eval "systemctl enable nginx"
-eval "service nginx restart"
+sudo ln -s /etc/nginx/sites-available/Login /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl daemon-reload
+sudo systemctl enable nginx
+sudo service nginx restart

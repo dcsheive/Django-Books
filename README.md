@@ -12,4 +12,8 @@ git clone https://github.com/dcsheive/Django-Books.git
 Then execute start.sh with EC2 Public and Private IPs:
 
 sudo chmod +x start.sh
-./start.sh <Public-IP> <Private-IP>
+sudo ./start.sh <Public-IP> <Private-IP>
+
+Update 
+sudo chmod +x update.sh
+sudo ./update.sh <Public-IP>
