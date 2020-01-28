@@ -14,7 +14,8 @@ sudo chmod +x start.sh
 
 sudo ./start.sh <Public-IP>
 
-Update 
+Update:
+
 sudo chmod +x update.sh
 
 sudo ./update.sh <Public-IP>
