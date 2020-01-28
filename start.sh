@@ -22,7 +22,7 @@ sudo python3 -m venv venv
 source ./venv/bin/activate
 pip3 install -r Django-Books/requirements.txt
 pip3 install gunicorn
-python3 Django-Books/manage.py migrate
+python3 Django-Books/manage.py migrate --run-syncdb
 python3 Django-Books/manage.py collectstatic
 
 echo "[Unit]
