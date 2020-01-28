@@ -64,4 +64,3 @@ sudo nginx -t
 sudo systemctl daemon-reload
 sudo systemctl enable nginx
 sudo service nginx restart
-sudo chown ubuntu db.sqlite3
