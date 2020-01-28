@@ -64,6 +64,4 @@ sudo nginx -t
 sudo systemctl daemon-reload
 sudo systemctl enable nginx
 sudo service nginx restart
-
-sudo rm -rf Django-Books/db.sqlite3
-python3 Django-Books/manage.py migrate
+sudo chown ubuntu db.sqlite3
